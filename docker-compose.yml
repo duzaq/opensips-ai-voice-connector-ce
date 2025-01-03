@@ -1,0 +1,31 @@
+services:
+  engine:
+    container_name: ai-voice-connector-engine
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    environment:
+      CONFIG_FILE: /app/src/config.ini
+    env_file:
+      - ./docker/.env
+    volumes:
+      - ./src:/app/src/
+    ports:
+      - "8080:8080"  # Mapeia a porta 8080 do host para a porta 8080 do contêiner
+    networks:
+      - voice-network
+
+  opensips:
+    container_name: ai-voice-connector-opensips
+    image: opensips/opensips:latest
+    ports:
+      - "5060:5060/udp"  # Mapeia a porta 5060 UDP do host para a porta 5060 UDP do contêiner
+      - "50060:50060"    # Mapeia a porta 50060 do host para a porta 50060 do contêiner
+    volumes:
+      - ./cfg/:/etc/opensips/
+    networks:
+      - voice-network
+
+networks:
+  voice-network:
+    driver: bridge
