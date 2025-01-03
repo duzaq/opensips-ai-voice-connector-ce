@@ -7,7 +7,7 @@ services:
     environment:
       CONFIG_FILE: /app/src/config.ini
     env_file:
-      - ./docker/.env
+      - .env
     volumes:
       - ./src:/app/src/
     ports:
